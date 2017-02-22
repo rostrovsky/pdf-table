@@ -12,15 +12,26 @@ import static org.opencv.core.Core.bitwise_xor;
 import static org.opencv.imgproc.Imgproc.*;
 import static pdftable.PdfTableSettings.*;
 
-
+/**
+ * Class responsible for determining table cells bounding boxes.
+ * Should be used as static.
+ */
 public class TableExtractor {
 
     static {
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
     }
 
-    private TableExtractor() {}
+    private TableExtractor() {
+    }
 
+    /**
+     * Applies series of filters on page image and extracts table cells bounding rectangles.
+     * Additionally dumps debug PNG images when pdftable.PdfTableSettings.requestedDebugImages() is true.
+     *
+     * @param inImage Input image
+     * @return List of org.opencv.core.Rect objects representing cell bounding rectangles.
+     */
     public static List<Rect> getTableBoundingRectangles(Mat inImage) {
         List<Rect> out = new ArrayList<>();
 
@@ -107,18 +118,36 @@ public class TableExtractor {
         return out;
     }
 
+    /**
+     * Applies Binary Inverted Threshold (BIT) to Mat image.
+     *
+     * @param input Input image
+     * @return org.opencv.core.Mat image with applied BIT
+     */
     private static Mat binaryInvertedThreshold(Mat input) {
         Mat out = new Mat();
         threshold(input, out, getBITThreshold(), getBITMaxval(), THRESH_BINARY_INV);
         return out;
     }
 
+    /**
+     * Applies Canny filter to Mat image.
+     *
+     * @param input Input image
+     * @return org.opencv.core.Mat image with applied Canny filter
+     */
     private static Mat cannyFilter(Mat input) {
         Mat out = new Mat();
         Canny(input, out, getCannyThreshold1(), getCannyThreshold2(), getCannyApertureSize(), hasCannyL2Gradient());
         return out;
     }
 
+    /**
+     * String helper used for constructing debug image output path.
+     *
+     * @param suffix Image filename suffix
+     * @return String representing image path
+     */
     private static String buildDebugFilename(String suffix) {
         return getDebugFileOutputDir().resolve(getDebugFilename() + "_" + suffix + ".png").toString();
     }

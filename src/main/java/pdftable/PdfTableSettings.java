@@ -3,6 +3,9 @@ package pdftable;
 
 import java.nio.file.Path;
 
+/**
+ * Global image conversion settings.
+ */
 public class PdfTableSettings {
 
     // DPI SETTINGS
