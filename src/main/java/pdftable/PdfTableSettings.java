@@ -13,7 +13,7 @@ public class PdfTableSettings {
     private static boolean CANNY_FILTERING = false;
 
     // BINARY INVERTED THRESHOLD SETTINGS
-    private static double BIT_THRESHOLD = 200;
+    private static double BIT_THRESHOLD = 150;
     private static double BIT_MAXVAL = 255;
 
     // CANNY FILTER SETTINGS
