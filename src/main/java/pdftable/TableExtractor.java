@@ -10,47 +10,49 @@ import java.util.List;
 
 import static org.opencv.core.Core.bitwise_xor;
 import static org.opencv.imgproc.Imgproc.*;
-import static pdftable.PdfTableSettings.*;
 
 /**
  * Class responsible for determining table cells bounding boxes.
  * Should be used as static.
  */
-public class TableExtractor {
+class TableExtractor {
+
+    private PdfTableSettings settings;
 
     static {
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
     }
 
-    private TableExtractor() {
+    public TableExtractor(PdfTableSettings settings) {
+        this.settings = settings;
     }
 
     /**
      * Applies series of filters on page image and extracts table cells bounding rectangles.
-     * Additionally dumps debug PNG images when pdftable.PdfTableSettings.requestedDebugImages() is true.
+     * Additionally dumps debug PNG images when settings.hasDebugImages() is true.
      *
      * @param inImage Input image
      * @return List of org.opencv.core.Rect objects representing cell bounding rectangles.
      */
-    public static List<Rect> getTableBoundingRectangles(Mat inImage) {
+    public List<Rect> getTableBoundingRectangles(Mat inImage) {
         List<Rect> out = new ArrayList<>();
 
-        if (requestedDebugImages()) {
+        if (settings.hasDebugImages()) {
             Imgcodecs.imwrite(buildDebugFilename("original_grayscaled"), inImage);
         }
 
         // binary inverted threshold
         Mat bit = binaryInvertedThreshold(inImage);
-        if (requestedDebugImages()) {
+        if (settings.hasDebugImages()) {
             Imgcodecs.imwrite(buildDebugFilename("binary_inverted_threshold"), bit);
         }
 
         // find contours
         List<MatOfPoint> contours = new ArrayList<>();
-        if (hasCannyFiltering()) {
+        if (settings.hasCannyFiltering()) {
             Mat canny = cannyFilter(inImage);
             findContours(canny, contours, new Mat(), RETR_EXTERNAL, CHAIN_APPROX_SIMPLE);
-            if (requestedDebugImages()) {
+            if (settings.hasDebugImages()) {
                 Imgcodecs.imwrite(buildDebugFilename("canny1"), canny);
             }
         } else {
@@ -60,23 +62,23 @@ public class TableExtractor {
         // draw contour
         Mat contourMask = bit.clone();
         drawContours(contourMask, contours, -1, new Scalar(255, 255, 255), Core.FILLED);
-        if (requestedDebugImages()) {
+        if (settings.hasDebugImages()) {
             Imgcodecs.imwrite(buildDebugFilename("contour_mask"), contourMask);
         }
 
         // XOR threshold and mask
         Mat xored = new Mat();
         bitwise_xor(bit, contourMask, xored);
-        if (requestedDebugImages()) {
+        if (settings.hasDebugImages()) {
             Imgcodecs.imwrite(buildDebugFilename("xored"), xored);
         }
 
         // find contours #2
         List<MatOfPoint> contours2 = new ArrayList<>();
-        if (hasCannyFiltering()) {
+        if (settings.hasCannyFiltering()) {
             Mat canny2 = cannyFilter(xored);
             findContours(canny2, contours2, new Mat(), RETR_EXTERNAL, CHAIN_APPROX_SIMPLE);
-            if (requestedDebugImages()) {
+            if (settings.hasDebugImages()) {
                 Imgcodecs.imwrite(buildDebugFilename("canny2"), canny2);
             }
         } else {
@@ -84,7 +86,7 @@ public class TableExtractor {
         }
 
         // draw contour #2
-        if (requestedDebugImages()) {
+        if (settings.hasDebugImages()) {
             Mat contourMask2 = inImage.clone();
             drawContours(contourMask2, contours2, -1, new Scalar(255, 255, 255), Core.FILLED);
             Imgcodecs.imwrite(buildDebugFilename("final_contours"), contourMask2);
@@ -94,7 +96,7 @@ public class TableExtractor {
         for (int i = 0; i < contours2.size(); i++) {
             MatOfPoint2f approxCurve = new MatOfPoint2f();
             MatOfPoint2f contour2f = new MatOfPoint2f(contours2.get(i).toArray());
-            double approxDistance = Imgproc.arcLength(contour2f, true) * getApproxDistScaleFactor();
+            double approxDistance = Imgproc.arcLength(contour2f, true) * settings.getApproxDistScaleFactor();
             Imgproc.approxPolyDP(contour2f, approxCurve, approxDistance, true);
             MatOfPoint points = new MatOfPoint(approxCurve.toArray());
             Rect rect = Imgproc.boundingRect(points);
@@ -103,7 +105,7 @@ public class TableExtractor {
 
         Collections.reverse(out);
 
-        if (requestedDebugImages()) {
+        if (settings.hasDebugImages()) {
             int ri = 0;
             for (Rect rect : out) {
                 Mat outImage = inImage.clone();
@@ -118,15 +120,19 @@ public class TableExtractor {
         return out;
     }
 
+    public void setSettings(PdfTableSettings settings) {
+        this.settings = settings;
+    }
+
     /**
      * Applies Binary Inverted Threshold (BIT) to Mat image.
      *
      * @param input Input image
      * @return org.opencv.core.Mat image with applied BIT
      */
-    private static Mat binaryInvertedThreshold(Mat input) {
+    private Mat binaryInvertedThreshold(Mat input) {
         Mat out = new Mat();
-        threshold(input, out, getBITThreshold(), getBITMaxval(), THRESH_BINARY_INV);
+        threshold(input, out, settings.getBitThreshold(), settings.getBitMaxVal(), THRESH_BINARY_INV);
         return out;
     }
 
@@ -136,9 +142,9 @@ public class TableExtractor {
      * @param input Input image
      * @return org.opencv.core.Mat image with applied Canny filter
      */
-    private static Mat cannyFilter(Mat input) {
+    private Mat cannyFilter(Mat input) {
         Mat out = new Mat();
-        Canny(input, out, getCannyThreshold1(), getCannyThreshold2(), getCannyApertureSize(), hasCannyL2Gradient());
+        Canny(input, out, settings.getCannyThreshold1(), settings.getCannyThreshold2(), settings.getCannyApertureSize(), settings.hasCannyL2Gradient());
         return out;
     }
 
@@ -148,8 +154,8 @@ public class TableExtractor {
      * @param suffix Image filename suffix
      * @return String representing image path
      */
-    private static String buildDebugFilename(String suffix) {
-        return getDebugFileOutputDir().resolve(getDebugFilename() + "_" + suffix + ".png").toString();
+    private String buildDebugFilename(String suffix) {
+        return settings.getDebugFileOutputDir().resolve(settings.getDebugFilename() + "_" + suffix + ".png").toString();
     }
 
 }

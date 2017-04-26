@@ -4,139 +4,208 @@ package pdftable;
 import java.nio.file.Path;
 
 /**
- * Global image conversion settings.
+ * Image conversion settings.
  */
 public class PdfTableSettings {
 
+    public static class PdfTableSettingsBuilder {
+
+        // --------------
+        // DEFAULT VALUES
+        // --------------
+
+        // DPI SETTINGS
+        private static final int DEFAULT_PDF_DPI = 72;
+        private int pdfRenderingDpi = 120;
+
+        // CANNY EDGE DETECTION FLAG
+        private boolean cannyFiltering = false;
+
+        // BINARY INVERTED THRESHOLD SETTINGS
+        private double bitThreshold = 150;
+        private double bitMaxVal = 255;
+
+        // CANNY FILTER SETTINGS
+        private double cannyThreshold1 = 50;
+        private double cannyThreshold2 = 200;
+        private int cannyApertureSize = 3;
+        private boolean cannyL2Gradient = false;
+
+        // BOUNDING RECT PARAMS
+        private double approxDistScaleFactor = 0.02;
+
+        // DEBUG IMAGES PARAMS
+        private boolean debugImages = false;
+        private Path debugFileOutputDir;
+        private String debugFilename;
+
+        public PdfTableSettingsBuilder setPdfRenderingDpi(int pdfRenderingDpi) {
+            this.pdfRenderingDpi = pdfRenderingDpi;
+            return this;
+        }
+
+        public PdfTableSettingsBuilder setCannyFiltering(boolean cannyFiltering) {
+            this.cannyFiltering = cannyFiltering;
+            return this;
+        }
+
+        public PdfTableSettingsBuilder setBitThreshold(double bitThreshold) {
+            this.bitThreshold = bitThreshold;
+            return this;
+        }
+
+        public PdfTableSettingsBuilder setBitMaxVal(double bitMaxVal) {
+            this.bitMaxVal = bitMaxVal;
+            return this;
+        }
+
+        public PdfTableSettingsBuilder setCannyThreshold1(double cannyThreshold1) {
+            this.cannyThreshold1 = cannyThreshold1;
+            return this;
+        }
+
+        public PdfTableSettingsBuilder setCannyThreshold2(double cannyThreshold2) {
+            this.cannyThreshold2 = cannyThreshold2;
+            return this;
+        }
+
+        public PdfTableSettingsBuilder setCannyApertureSize(int cannyApertureSize) {
+            this.cannyApertureSize = cannyApertureSize;
+            return this;
+        }
+
+        public PdfTableSettingsBuilder setCannyL2Gradient(boolean cannyL2Gradient) {
+            this.cannyL2Gradient = cannyL2Gradient;
+            return this;
+        }
+
+        public PdfTableSettingsBuilder setApproxDistScaleFactor(double approxDistScaleFactor) {
+            this.approxDistScaleFactor = approxDistScaleFactor;
+            return this;
+        }
+
+        public PdfTableSettingsBuilder setDebugImages(boolean debugImages) {
+            this.debugImages = debugImages;
+            return this;
+        }
+
+        public PdfTableSettingsBuilder setDebugFileOutputDir(Path debugFileOutputDir) {
+            this.debugFileOutputDir = debugFileOutputDir;
+            return this;
+        }
+
+        public PdfTableSettingsBuilder setDebugFilename(String debugFilename) {
+            this.debugFilename = debugFilename;
+            return this;
+        }
+
+        public PdfTableSettings build() {
+            return new PdfTableSettings(this);
+        }
+    }
+
     // DPI SETTINGS
-    private static final int DEFAULT_PDF_DPI = 72;
-    private static int PDF_RENDERING_DPI = 120;
+    private int defaultPdfDpi;
+    private int pdfRenderingDpi;
 
     // CANNY EDGE DETECTION FLAG
-    private static boolean CANNY_FILTERING = false;
+    private boolean cannyFiltering;
 
     // BINARY INVERTED THRESHOLD SETTINGS
-    private static double BIT_THRESHOLD = 150;
-    private static double BIT_MAXVAL = 255;
+    private double bitThreshold;
+    private double bitMaxVal;
 
     // CANNY FILTER SETTINGS
-    private static double CANNY_THRESHOLD_1 = 50;
-    private static double CANNY_THRESHOLD_2 = 200;
-    private static int CANNY_APERTURE_SIZE = 3;
-    private static boolean CANNY_L2_GRADIENT = false;
+    private double cannyThreshold1;
+    private double cannyThreshold2;
+    private int cannyApertureSize;
+    private boolean cannyL2Gradient;
 
     // BOUNDING RECT PARAMS
-    private static double APPROX_DIST_SCALE_FACTOR = 0.02;
+    private double approxDistScaleFactor;
 
     // DEBUG IMAGES PARAMS
-    private static boolean DEBUG_IMAGES = false;
-    private static Path DEBUG_FILE_OUTPUT_DIR;
-    private static String DEBUG_FILENAME;
+    private boolean debugImages;
+    private Path debugFileOutputDir;
+    private String debugFilename;
 
-    private PdfTableSettings() {
+    private PdfTableSettings(PdfTableSettingsBuilder builder) {
+        this.defaultPdfDpi = PdfTableSettingsBuilder.DEFAULT_PDF_DPI;
+        this.pdfRenderingDpi = builder.pdfRenderingDpi;
+        this.cannyFiltering = builder.cannyFiltering;
+        this.bitThreshold = builder.bitThreshold;
+        this.bitMaxVal = builder.bitMaxVal;
+        this.cannyThreshold1 = builder.cannyThreshold1;
+        this.cannyThreshold2 = builder.cannyThreshold2;
+        this.cannyApertureSize = builder.cannyApertureSize;
+        this.cannyL2Gradient = builder.cannyL2Gradient;
+        this.approxDistScaleFactor = builder.approxDistScaleFactor;
+        this.debugImages = builder.debugImages;
+        this.debugFileOutputDir = builder.debugFileOutputDir;
+        this.debugFilename = builder.debugFilename;
     }
 
-    public static int getDefaultPdfDpi() {
-        return DEFAULT_PDF_DPI;
+    public PdfTableSettings() {
+        this(new PdfTableSettingsBuilder());
     }
 
-    public static int getPdfRenderingDpi() {
-        return PDF_RENDERING_DPI;
+    public static PdfTableSettingsBuilder getBuilder() {
+        return new PdfTableSettingsBuilder();
     }
 
-    public static void setPdfRenderingDpi(int pdfRenderingDpi) {
-        PDF_RENDERING_DPI = pdfRenderingDpi;
+    public int getDefaultPdfDpi() {
+        return defaultPdfDpi;
     }
 
-    public static double getDpiRatio() {
-        return (double) DEFAULT_PDF_DPI / PDF_RENDERING_DPI;
+    public int getPdfRenderingDpi() {
+        return pdfRenderingDpi;
     }
 
-    public static void setCannyFiltering(boolean canny) {
-        CANNY_FILTERING = canny;
+    public boolean hasCannyFiltering() {
+        return cannyFiltering;
     }
 
-    public static boolean hasCannyFiltering() {
-        return CANNY_FILTERING;
+    public double getBitThreshold() {
+        return bitThreshold;
     }
 
-    public static double getBITThreshold() {
-        return BIT_THRESHOLD;
+    public double getBitMaxVal() {
+        return bitMaxVal;
     }
 
-    public static void setBitThreshold(double bitThreshold) {
-        BIT_THRESHOLD = bitThreshold;
+    public double getCannyThreshold1() {
+        return cannyThreshold1;
     }
 
-    public static double getBITMaxval() {
-        return BIT_MAXVAL;
+    public double getCannyThreshold2() {
+        return cannyThreshold2;
     }
 
-    public static void setBitMaxval(double bitMaxval) {
-        BIT_MAXVAL = bitMaxval;
+    public int getCannyApertureSize() {
+        return cannyApertureSize;
     }
 
-    public static double getCannyThreshold1() {
-        return CANNY_THRESHOLD_1;
+    public boolean hasCannyL2Gradient() {
+        return cannyL2Gradient;
     }
 
-    public static void setCannyThreshold1(double cannyThreshold1) {
-        CANNY_THRESHOLD_1 = cannyThreshold1;
+    public double getApproxDistScaleFactor() {
+        return approxDistScaleFactor;
     }
 
-    public static double getCannyThreshold2() {
-        return CANNY_THRESHOLD_2;
+    public boolean hasDebugImages() {
+        return debugImages;
     }
 
-    public static void setCannyThreshold2(double cannyThreshold2) {
-        CANNY_THRESHOLD_2 = cannyThreshold2;
+    public Path getDebugFileOutputDir() {
+        return debugFileOutputDir;
     }
 
-    public static int getCannyApertureSize() {
-        return CANNY_APERTURE_SIZE;
+    public String getDebugFilename() {
+        return debugFilename;
     }
 
-    public static void setCannyApertureSize(int cannyApertureSize) {
-        CANNY_APERTURE_SIZE = cannyApertureSize;
-    }
-
-    public static boolean hasCannyL2Gradient() {
-        return CANNY_L2_GRADIENT;
-    }
-
-    public static void setCannyL2Gradient(boolean cannyL2Gradient) {
-        CANNY_L2_GRADIENT = cannyL2Gradient;
-    }
-
-    public static double getApproxDistScaleFactor() {
-        return APPROX_DIST_SCALE_FACTOR;
-    }
-
-    public static void setApproxDistScaleFactor(double approxDistScaleFactor) {
-        APPROX_DIST_SCALE_FACTOR = approxDistScaleFactor;
-    }
-
-    public static boolean requestedDebugImages() {
-        return DEBUG_IMAGES;
-    }
-
-    public static void setDebugImages(boolean debugImages) {
-        DEBUG_IMAGES = debugImages;
-    }
-
-    public static Path getDebugFileOutputDir() {
-        return DEBUG_FILE_OUTPUT_DIR;
-    }
-
-    public static void setDebugFileOutputDir(Path debugFileOutputDir) {
-        DEBUG_FILE_OUTPUT_DIR = debugFileOutputDir;
-    }
-
-    public static String getDebugFilename() {
-        return DEBUG_FILENAME;
-    }
-
-    public static void setDebugFileName(String debugFilename) {
-        DEBUG_FILENAME = debugFilename;
+    public double getDpiRatio() {
+        return (double) defaultPdfDpi / pdfRenderingDpi;
     }
 }
