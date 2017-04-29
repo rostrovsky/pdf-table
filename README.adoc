@@ -1,23 +1,27 @@
-# pdf-table
+= pdf-table
 Java utility for parsing PDF tabular data using Apache PDFBox and OpenCV.
 
-## Prerequisites
 
-### JDK
+== Prerequisites
+
+=== JDK
 JAVA 8 is required.
 
-### External dependencies
+=== External dependencies
 pdf-table requires compiled *OpenCV 3.x.x* to work properly:
-1. Download latest OpenCV release from http://opencv.org/releases.html
-2. Unpack it and add to your system PATH
 
-## Usage
+. Download latest _OpenCV_ release from http://opencv.org/releases.html
+. Unpack it and add to your system PATH
 
-### Parsing PDFs
+
+== Usage
+
+=== Parsing PDFs
 what is parsing etc.
 
-#### single-threaded example
-```java
+==== single-threaded example
+[source, java]
+----
 class SingleThreadParser {
     public static void main(String[] args) throws IOException {
         PDDocument pdfDoc = PDDocument.load(new File("some.pdf"));
@@ -25,10 +29,11 @@ class SingleThreadParser {
         List<ParsedTablePage> parsed = reader.parsePdfTablePages(pdfDoc, 1, pdfDoc.getNumberOfPages());
     }
 }
-```
+----
 
-#### multi-threaded example
-```java
+==== multi-threaded example
+[source, java]
+----
 class MultiThreadParser {
     public static void main(String[] args) throws IOException {
         final int THREAD_COUNT = 8;
@@ -60,13 +65,14 @@ class MultiThreadParser {
                 .sorted((p1, p2) -> Integer.compare(p1.getPageNum(), p2.getPageNum())).collect(Collectors.toList());
     }
 }
-```
+----
 
-### Saving PDF pages as PNG images
+=== Saving PDF pages as PNG images
 what is saving etc.
 
-#### single-threaded example
-```java
+==== single-threaded example
+[source, java]
+----
 class SingleThreadPNGDump {
     public static void main(String[] args) throws IOException {
         PDDocument pdfDoc = PDDocument.load(new File("some.pdf"));
@@ -75,10 +81,11 @@ class SingleThreadPNGDump {
         reader.savePdfPagesAsPNG(pdfDoc, 1, pdfDoc.getNumberOfPages(), outputPath);
     }
 }
-```
+----
 
-#### multi-threaded example
-```java
+==== multi-threaded example
+[source, java]
+----
 class MultiThreadPNGDump {
     public static void main(String[] args) throws IOException {
         final int THREAD_COUNT = 8;
@@ -105,13 +112,14 @@ class MultiThreadPNGDump {
         }
     }
 }
-```
+----
 
-### Saving debug PNG images
+=== Saving debug PNG images
 what is saving debug images etc.
 
-#### single-threaded example
-```java
+==== single-threaded example
+[source, java]
+----
 class SingleThreadDebugImgsDump {
     public static void main(String[] args) throws IOException {
         PDDocument pdfDoc = PDDocument.load(new File("some.pdf"));
@@ -120,9 +128,11 @@ class SingleThreadDebugImgsDump {
         reader.savePdfTablePagesDebugImages(pdfDoc, 1, pdfDoc.getNumberOfPages(), outputPath);
     }
 }
-```
-#### multi-threaded example
-```java
+----
+
+==== multi-threaded example
+[source, java]
+----
 class MultiThreadDebugImgsDump {
     public static void main(String[] args) throws IOException {
         final int THREAD_COUNT = 8;
@@ -149,10 +159,10 @@ class MultiThreadDebugImgsDump {
         }
     }
 }
-```
+----
 
-### Parsing settings
+=== Parsing settings
 about PdfTableSettings...
 
-### Output format
+=== Output format
 about output format...
