@@ -72,7 +72,8 @@ class MultiThreadParser {
 ----
 
 === Saving PDF pages as PNG images
-what is saving etc.
+PDF-Table provides methods for saving PDF pages as PNG images. +
+Rendering DPI can be modified in `PdfTableSettings` (see: <<Parsing settings>>).
 
 ==== single-threaded example
 [source, java]
@@ -119,7 +120,10 @@ class MultiThreadPNGDump {
 ----
 
 === Saving debug PNG images
-what is saving debug images etc.
+When tables in PDF document cannot be parsed correctly with default settings, user can save debug images that show page
+at various stages of processing. +
+Using these images, user can adjust `PdfTableSettings` accordingly to achieve desired results
+(see: <<Parsing settings>>).
 
 ==== single-threaded example
 [source, java]
