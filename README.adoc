@@ -1,6 +1,9 @@
-= pdf-table
+= PDF-table
+:toc:
 
-Java utility for parsing PDF tabular data using Apache PDFBox and OpenCV.
+== What is PDF-table?
+PDF-table is Java utility library that can be used for parsing tabular data in PDF documents. +
+Core processing of PDF documents is performed with utilization of *Apache PDFBox* and *OpenCV*.
 
 == Prerequisites
 
@@ -170,10 +173,7 @@ Custom settings instance can be passed to `PdfTableReader` constructor when non-
 
 [source, java]
 ----
-class UseCustomPdfTableSettings {
-    public static void main(String[] args) throws IOException {
-    }
-}
+(...)
 ----
 
 
@@ -185,6 +185,8 @@ Each parsed PDF page is being returned as `ParsedTablePage` object:
 
 PDDocument pdfDoc = PDDocument.load(new File("some.pdf"));
 PdfTableReader reader = new PdfTableReader();
+
+// first page in document has index == 1, not 0 !
 ParsedTablePage firstPage = reader.parsePdfTablePage(pdfDoc, 1);
 
 // getting page number
@@ -195,8 +197,9 @@ assert firstPage.getPageNum() == 1;
 ParsedTablePage.ParsedTableRow firstRow = firstPage.getRow(0);
 
 // getting third cell in second row
-String thirdCellContents = firstPage.getRow(1).getCell(2);
+String thirdCellContent = firstPage.getRow(1).getCell(2);
 
-// cell contents contain <CR><LF> characters, so it is recommended to trim them
-thirdCellContents = thirdCellContents.trim();
+// cell content usually contain <CR><LF> characters,
+// so it is recommended to trim them before processing
+double thirdCellNumericValue = Double.valueOf(thirdCellContent.trim());
 ----
