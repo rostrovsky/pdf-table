@@ -171,13 +171,23 @@ class MultiThreadDebugImgsDump {
 
 === Parsing settings
 
-PDF rendering and OpenCv filtering settings are stored in `PdfTableSettings` object.
+PDF rendering and OpenCV filtering settings are stored in `PdfTableSettings` object.
 
 Custom settings instance can be passed to `PdfTableReader` constructor when non-default values are needed:
 
 [source, java]
 ----
 (...)
+
+PdfTableSettings settings = PdfTableSettings.getBuilder()
+                .setCannyFiltering(true)
+                .setCannyApertureSize(5)
+                .setCannyThreshold1(40)
+                .setCannyThreshold2(190.5)
+                .setPdfRenderingDpi(160)
+                .build();
+
+PdfTableReader reader = new PdfTableReader(settings);
 ----
 
 
