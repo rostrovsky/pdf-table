@@ -178,4 +178,25 @@ class UseCustomPdfTableSettings {
 
 
 === Output format
-Each parsed PDF page is being returned as `ParsedTablePage` object.
+Each parsed PDF page is being returned as `ParsedTablePage` object:
+[source, java]
+----
+(...)
+
+PDDocument pdfDoc = PDDocument.load(new File("some.pdf"));
+PdfTableReader reader = new PdfTableReader();
+ParsedTablePage firstPage = reader.parsePdfTablePage(pdfDoc, 1);
+
+// getting page number
+assert firstPage.getPageNum() == 1;
+
+// rows and cells are zero-indexed just like elements of the List
+// getting first row
+ParsedTablePage.ParsedTableRow firstRow = firstPage.getRow(0);
+
+// getting third cell in second row
+String thirdCellContents = firstPage.getRow(1).getCell(2);
+
+// cell contents contain <CR><LF> characters, so it is recommended to trim them
+thirdCellContents = thirdCellContents.trim();
+----
