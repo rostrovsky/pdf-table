@@ -38,12 +38,13 @@ public class ParsedTablePage {
     private List<ParsedTableRow> rows;
     private int pageNum;
 
-    public ParsedTablePage(List<ParsedTableRow> rows) {
-        this.rows = rows;
+    private ParsedTablePage() {
+        this.rows = new ArrayList<>();
     }
 
-    public ParsedTablePage() {
-        this.rows = new ArrayList<>();
+    public ParsedTablePage(int pageNumber) {
+        this();
+        this.pageNum = pageNumber;
     }
 
     public List<ParsedTableRow> getRows() {
@@ -60,10 +61,6 @@ public class ParsedTablePage {
 
     public int getPageNum() {
         return pageNum;
-    }
-
-    public void setPageNum(int pageNum) {
-        this.pageNum = pageNum;
     }
 
     @Override

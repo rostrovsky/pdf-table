@@ -89,7 +89,7 @@ public class PdfTableReaderTest {
         PdfTableReader reader = new PdfTableReader();
         reader.savePdfPagesAsPNG(PDFdoc, 1, PDFdoc.getNumberOfPages(), TEST_OUT_PATH);
         long end = System.currentTimeMillis();
-        System.out.println("Single thread: " + (end - start) / 1000.0);
+        System.out.println("save page image - Single thread: " + (end - start) / 1000.0);
     }
 
     @Test
@@ -116,7 +116,7 @@ public class PdfTableReaderTest {
         }
 
         long end = System.currentTimeMillis();
-        System.out.println("Multi thread: " + (end - start) / 1000.0);
+        System.out.println("save page image - multi thread: " + (end - start) / 1000.0);
     }
 
     @Test
@@ -125,7 +125,7 @@ public class PdfTableReaderTest {
         PdfTableReader reader = new PdfTableReader();
         reader.savePdfTablePagesDebugImages(PDFdoc, 1, PDFdoc.getNumberOfPages(), TEST_OUT_PATH);
         long end = System.currentTimeMillis();
-        System.out.println("Single thread: " + (end - start) / 1000.0);
+        System.out.println("save debug images - single thread: " + (end - start) / 1000.0);
     }
 
     @Test
@@ -152,7 +152,7 @@ public class PdfTableReaderTest {
         }
 
         long end = System.currentTimeMillis();
-        System.out.println("Multi thread: " + (end - start) / 1000.0);
+        System.out.println("save debug images - multi thread: " + (end - start) / 1000.0);
     }
 
     @Test
@@ -161,7 +161,7 @@ public class PdfTableReaderTest {
         PdfTableReader reader = new PdfTableReader();
         List<ParsedTablePage> parsed = reader.parsePdfTablePages(PDFdoc, 1, PDFdoc.getNumberOfPages());
         long end = System.currentTimeMillis();
-        System.out.println("Single thread: " + (end - start) / 1000.0);
+        System.out.println("parse pages - single thread: " + (end - start) / 1000.0);
         validatePdfContent(parsed);
     }
 
@@ -175,7 +175,6 @@ public class PdfTableReaderTest {
         for (final int pageNum : IntStream.rangeClosed(1, PDFdoc.getNumberOfPages()).toArray()) {
             Callable<ParsedTablePage> callable = () -> {
                 ParsedTablePage page = reader.parsePdfTablePage(PDFdoc, pageNum);
-                page.setPageNum(pageNum);
                 return page;
             };
             futures.add(executor.submit(callable));
@@ -192,7 +191,7 @@ public class PdfTableReaderTest {
         }
 
         long end = System.currentTimeMillis();
-        System.out.println("Multi thread: " + (end - start) / 1000.0);
+        System.out.println("parse pages - multi thread: " + (end - start) / 1000.0);
 
         List<ParsedTablePage> sortedParsedPages = parsedPages.stream()
                 .sorted((p1, p2) -> Integer.compare(p1.getPageNum(), p2.getPageNum())).collect(Collectors.toList());

@@ -95,9 +95,9 @@ public class PdfTableReader {
      * @return parsed page
      * @throws IOException
      */
-    private ParsedTablePage parsePdfTablePage(BufferedImage bi, PDPage pdPage) throws IOException {
+    private ParsedTablePage parsePdfTablePage(BufferedImage bi, PDPage pdPage, int pageNumber) throws IOException {
         List<Rect> rectangles = extractor.getTableBoundingRectangles(bufferedImage2GrayscaleMat(bi));
-        return parsePageByRectangles(pdPage, rectangles);
+        return parsePageByRectangles(pdPage, rectangles, pageNumber);
     }
 
     /**
@@ -117,8 +117,7 @@ public class PdfTableReader {
             synchronized (this) {
                 bi = renderer.renderImageWithDPI(page, settings.getPdfRenderingDpi(), ImageType.RGB);
             }
-            ParsedTablePage parsedTablePage = parsePdfTablePage(bi, document.getPage(page));
-            parsedTablePage.setPageNum(page + 1);
+            ParsedTablePage parsedTablePage = parsePdfTablePage(bi, document.getPage(page), page + 1);
             out.add(parsedTablePage);
         }
         return out;
@@ -183,9 +182,9 @@ public class PdfTableReader {
      * @return parsed page
      * @throws IOException
      */
-    private ParsedTablePage parsePageByRectangles(PDPage page, List<Rect> rectangles) throws IOException {
+    private ParsedTablePage parsePageByRectangles(PDPage page, List<Rect> rectangles, int pageNumber) throws IOException {
         List<List<Rect>> sortedRects = groupRectanglesByRow(rectangles);
-        ParsedTablePage out = new ParsedTablePage();
+        ParsedTablePage out = new ParsedTablePage(pageNumber);
 
         PDFTextStripperByArea stripper = new PDFTextStripperByArea();
         stripper.setSortByPosition(true);
