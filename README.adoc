@@ -22,7 +22,18 @@ pdf-table requires compiled *OpenCV 3.x.x* to work properly:
 == Usage
 
 === Parsing PDFs
-what is parsing etc.
+When PDF document page is being parsed, following operations are performed:
+
+. Page is converted to grayscale image [OpenCV].
+. Binary Inverted Threshold (BIT) is applied to grayscaled image [OpenCV].
+. Contours are detected on BIT image and contour mask is created [OpenCV].
+. Contour mask is XORed with BIT image [OpenCV].
+. Contours are detected once again on XORed image [OpenCV].
+. Final contours are drawn [OpenCV].
+. Bounding rectangles are detected from final contours [OpenCV].
+. PDF is being parsed region-by-region using bounding rectangles coordinates [Apache PDFBox].
+
+For information about parsed output, refer to <<Output format>>
 
 ==== single-threaded example
 [source, java]
