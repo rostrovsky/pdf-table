@@ -26,9 +26,9 @@ When PDF document page is being parsed, following operations are performed:
 
 . Page is converted to grayscale image [OpenCV].
 . Binary Inverted Threshold (BIT) is applied to grayscaled image [OpenCV].
-. Contours are detected on BIT image and contour mask is created [OpenCV].
+. Contours are detected on BIT image and contour mask is created (additional Canny filtering can be turned on in this step) [OpenCV].
 . Contour mask is XORed with BIT image [OpenCV].
-. Contours are detected once again on XORed image [OpenCV].
+. Contours are detected once again on XORed image (additional Canny filtering can be turned on in this step) [OpenCV].
 . Final contours are drawn [OpenCV].
 . Bounding rectangles are detected from final contours [OpenCV].
 . PDF is being parsed region-by-region using bounding rectangles coordinates [Apache PDFBox].
@@ -56,6 +56,7 @@ class MultiThreadParser {
         PDDocument pdfDoc = PDDocument.load(new File("some.pdf"));
         PdfTableReader reader = new PdfTableReader();
 
+        // parse pages simultaneously
         ExecutorService executor = Executors.newFixedThreadPool(THREAD_COUNT);
         List<Future<ParsedTablePage>> futures = new ArrayList<>();
         for (final int pageNum : IntStream.rangeClosed(1, pdfDoc.getNumberOfPages()).toArray()) {
@@ -66,6 +67,7 @@ class MultiThreadParser {
             futures.add(executor.submit(callable));
         }
 
+        // collect parsed pages
         List<ParsedTablePage> unsortedParsedPages = new ArrayList<>(pdfDoc.getNumberOfPages());
         try {
             for (Future<ParsedTablePage> f : futures) {
@@ -76,6 +78,7 @@ class MultiThreadParser {
             throw new RuntimeException(e);
         }
 
+        // sort pages by pageNum
         List<ParsedTablePage> sortedParsedPages = unsortedParsedPages.stream()
                 .sorted((p1, p2) -> Integer.compare(p1.getPageNum(), p2.getPageNum())).collect(Collectors.toList());
     }
@@ -190,6 +193,7 @@ Custom settings instance can be passed to `PdfTableReader` constructor when non-
 ----
 (...)
 
+// build settings object
 PdfTableSettings settings = PdfTableSettings.getBuilder()
                 .setCannyFiltering(true)
                 .setCannyApertureSize(5)
@@ -198,6 +202,7 @@ PdfTableSettings settings = PdfTableSettings.getBuilder()
                 .setPdfRenderingDpi(160)
                 .build();
 
+// pass settings to reader
 PdfTableReader reader = new PdfTableReader(settings);
 ----
 
