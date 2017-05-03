@@ -40,20 +40,20 @@ public class ParsedTablePage {
     private int pageNum;
 
     private ParsedTablePage() {
-        this.rows = new ArrayList<>();
+        rows = new ArrayList<>();
     }
 
     public ParsedTablePage(int pageNumber) {
         this();
-        this.pageNum = pageNumber;
+        pageNum = pageNumber;
     }
 
     public List<ParsedTableRow> getRows() {
         return rows;
     }
 
-    public void addRow(List<String> rows) {
-        this.rows.add(new ParsedTableRow(rows));
+    public void addRow(List<String> cells) {
+        rows.add(new ParsedTableRow(cells));
     }
 
     public ParsedTableRow getRow(int index) {

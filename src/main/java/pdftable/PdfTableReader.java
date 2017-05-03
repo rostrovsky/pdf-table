@@ -211,13 +211,13 @@ public class PdfTableReader {
         iRow = 0;
         iCol = 0;
         for (List<Rect> row : sortedRects) {
-            List<String> rowText = new ArrayList<>();
+            List<String> rowCells = new ArrayList<>();
             for (Rect col : row) {
                 String cellText = stripper.getTextForRegion(getRegionId(iRow, iCol));
-                rowText.add(cellText);
+                rowCells.add(cellText);
                 iCol++;
             }
-            out.addRow(rowText);
+            out.addRow(rowCells);
             iRow++;
             iCol = 0;
         }
