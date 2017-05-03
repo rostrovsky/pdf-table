@@ -30,8 +30,9 @@ public class ParsedTablePage {
 
         @Override
         public String toString() {
-            List<String> escapedCells = cells.stream().map(c-> StringEscapeUtils.escapeJava(c)).collect(Collectors.toList());
-            return String.format("<%s@%s; cells:%s>",this.getClass().getSimpleName(), System.identityHashCode(this), Arrays.toString(escapedCells.toArray()));
+            List<String> escapedCells = cells.stream().map(c -> StringEscapeUtils.escapeJava(c)).collect(Collectors.toList());
+            return String.format("<%s@%s; cells:%s>",
+                    this.getClass().getSimpleName(), System.identityHashCode(this), Arrays.toString(escapedCells.toArray()));
         }
     }
 
@@ -65,6 +66,7 @@ public class ParsedTablePage {
 
     @Override
     public String toString() {
-        return String.format("<%s@%s; rows:%s>",this.getClass().getSimpleName(), System.identityHashCode(this), Arrays.toString(rows.toArray()));
+        return String.format("<%s@%s; rows:%s>",
+                this.getClass().getSimpleName(), System.identityHashCode(this), Arrays.toString(rows.toArray()));
     }
 }
