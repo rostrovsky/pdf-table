@@ -33,7 +33,9 @@ When PDF document page is being parsed, following operations are performed:
 . Bounding rectangles are detected from final contours [OpenCV].
 . PDF is being parsed region-by-region using bounding rectangles coordinates [Apache PDFBox].
 
-For information about parsed output, refer to <<Output format>>
+Above algorithm is mostly derived from http://stackoverflow.com/a/23106594.
+
+For more information about parsed output, refer to <<Output format>>
 
 ==== single-threaded example
 [source, java]
