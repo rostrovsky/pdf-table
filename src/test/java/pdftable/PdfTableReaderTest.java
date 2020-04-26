@@ -25,8 +25,8 @@ import java.util.stream.IntStream;
 
 public class PdfTableReaderTest {
 
-    private static final Path TEST_OUT_PATH = Paths.get("C:", "pdf_tests");
     private static final String TEST_FILENAME = "test_tables.pdf";
+    private static Path TEST_OUT_PATH = null;
     private static PDDocument PDFdoc;
     private static final int THREAD_COUNT = 8;
     private static final int PAGE_CYCLE = 4;
@@ -52,6 +52,7 @@ public class PdfTableReaderTest {
         try {
             ClassLoader classLoader = getClass().getClassLoader();
             File file = new File(classLoader.getResource(TEST_FILENAME).getFile());
+            TEST_OUT_PATH = Paths.get(file.getParent());
             return PDDocument.load(file);
         } catch (Exception e) {
             e.printStackTrace();
