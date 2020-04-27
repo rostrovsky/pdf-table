@@ -19,6 +19,9 @@ jobs:
     - name: Download OpenCV 3.2.0
       run: Invoke-WebRequest -Uri https://github.com/opencv/opencv/releases/download/3.2.0/opencv-3.2.0-vc14.exe -OutFile $HOME\opencv-3.2.0-vc14.exe
       shell: powershell
+    - name: ls home dir
+      run: ls $HOME
+      shell: powershell
     - name: Unpack OpenCV 3.2.0
       run: $HOME\opencv-3.2.0-vc14.exe -y -s
       shell: powershell
