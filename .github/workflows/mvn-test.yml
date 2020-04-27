@@ -21,7 +21,7 @@ jobs:
       shell: powershell
     - name: Unpack OpenCV 3.2.0
       run: ./opencv-3.2.0-vc14.exe -y -s
-      working-directory: ${env:HOME}
+      working-directory: $HOME
       shell: powershell
     - name: Set up JDK 1.8
       uses: actions/setup-java@v1
