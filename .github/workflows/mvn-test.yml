@@ -16,18 +16,14 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: Print homedir content
-      run: ls
-      working-directory: %HOME%
-    - name: pwd
-      run: Write-Host $pwd
-      working-directory: %HOME%
     - name: Download OpenCV 3.2.0
-      run: Invoke-WebRequest -Uri https://github.com/opencv/opencv/releases/download/3.2.0/opencv-3.2.0-vc14.exe -OutFile ${env:HOME}
+      run: Invoke-WebRequest -Uri https://github.com/opencv/opencv/releases/download/3.2.0/opencv-3.2.0-vc14.exe -OutFile $HOME
+      shell: powershell
+    - name: ls home dir
+      run: ls $HOME
       shell: powershell
     - name: Unpack OpenCV 3.2.0
-      run: .\opencv-3.2.0-vc14.exe -y -s
-      working-directory: $HOME
+      run: $HOME\opencv-3.2.0-vc14.exe -y -s
       shell: powershell
     - name: Set up JDK 1.8
       uses: actions/setup-java@v1
