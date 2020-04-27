@@ -16,13 +16,11 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: Create opencv dir
-      run: New-Item -Path . -Name "opencv" -ItemType "directory"
     - name: Download OpenCV 3.2.0
-      run: Invoke-WebRequest -Uri https://github.com/opencv/opencv/releases/download/3.2.0/opencv-3.2.0-vc14.exe -OutFile .\opencv
+      run: Invoke-WebRequest -Uri https://github.com/opencv/opencv/releases/download/3.2.0/opencv-3.2.0-vc14.exe -OutFile $HOME\opencv-3.2.0-vc14.exe
       shell: powershell
     - name: Unpack OpenCV 3.2.0
-      run: .\opencv\opencv-3.2.0-vc14.exe -y -s
+      run: $HOME\opencv\opencv-3.2.0-vc14.exe -y -s
       shell: powershell
     - name: Set up JDK 1.8
       uses: actions/setup-java@v1
