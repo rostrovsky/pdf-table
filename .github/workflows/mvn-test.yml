@@ -18,10 +18,10 @@ jobs:
     - uses: actions/checkout@v2
     - name: Print homedir content
       run: ls
-      working-directory: ~
+      working-directory: %HOME%
     - name: pwd
       run: Write-Host $pwd
-      working-directory: ~
+      working-directory: %HOME%
     - name: Download OpenCV 3.2.0
       run: Invoke-WebRequest -Uri https://github.com/opencv/opencv/releases/download/3.2.0/opencv-3.2.0-vc14.exe -OutFile ${env:HOME}
       shell: powershell
