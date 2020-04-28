@@ -29,7 +29,7 @@ jobs:
       run: Write-Host "::add-path::C:\Users\runneradmin\opencv\build\java\x64\"
       shell: powershell
     - name: ls opencv java x64
-      run: ls C:\Users\runneradmin\opencv\build\java
+      run: ls C:\Users\runneradmin\opencv\build\java\x64
       shell: powershell
     - name: echo PATH
       run: Write-Host ${env:PATH}
