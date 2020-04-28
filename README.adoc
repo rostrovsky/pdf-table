@@ -13,9 +13,9 @@ JAVA 8 is required.
 
 === External dependencies
 
-pdf-table requires compiled *OpenCV 3.2.0* to work properly:
+pdf-table requires compiled *OpenCV 3.4.2* to work properly:
 
-. Download OpenCV v3.2.0 from http://opencv.org/releases.html
+. Download OpenCV v3.4.2 from https://github.com/opencv/opencv/releases/tag/3.4.2
 . Unpack it and add to your system PATH:
     * Windows: `<opencv dir>\build\java\x64`
     * Linux: `TODO`
