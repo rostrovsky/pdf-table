@@ -26,7 +26,10 @@ jobs:
       run: C:\Users\runneradmin\opencv-3.2.0-vc14.exe -y -s
       shell: powershell
     - name: Add OpenCV to PATH
-      run: Write-Host "::add-path::C:\Users\runneradmin\opencv\build\java\x64"
+      run: Write-Host "::add-path::C:\Users\runneradmin\opencv\build\java\x64\"
+      shell: powershell
+    - name: ls opencv java x64
+      run: ls C:\Users\runneradmin\opencv\build\java\x64\
       shell: powershell
     - name: echo PATH
       run: Write-Host ${env:PATH}
