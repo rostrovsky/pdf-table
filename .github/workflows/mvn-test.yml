@@ -25,8 +25,14 @@ jobs:
     - name: Unpack OpenCV 3.2.0
       run: C:\Users\runneradmin\opencv-3.2.0-vc14.exe -y -s
       shell: powershell
+    - name: ls C:\Users\runneradmin
+      run: ls C:\Users\runneradmin
+      shell: powershell
     - name: Add OpenCV to PATH
       run: ${env:PATH} += ";C:\Users\runneradmin\opencv\build\java\x64"
+      shell: powershell
+    - name: echo PATH
+      run: Write-Host ${env:PATH}
       shell: powershell
     - name: Set up JDK 1.8
       uses: actions/setup-java@v1
