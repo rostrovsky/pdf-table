@@ -20,6 +20,15 @@ pdf-table requires compiled *OpenCV 3.4.2* to work properly:
     * Windows: `<opencv dir>\build\java\x64`
     * Linux: `TODO`
 
+== Installation
+[source, xml]
+----
+<dependency>
+  <groupId>com.github.rostrovsky</groupId>
+  <artifactId>pdf-table</artifactId>
+  <version>1.0.0</version>
+</dependency>
+----
 
 == Usage
 
