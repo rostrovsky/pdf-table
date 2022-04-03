@@ -26,7 +26,7 @@ jobs:
       shell: powershell
 
     - name: Add OpenCV to PATH
-      run: Write-Host "::add-path::C:\Users\runneradmin\opencv\build\java\x64\"
+      run: Write-Host "C:\Users\runneradmin\opencv\build\java\x64\" >> $env:GITHUB_PATH
       shell: powershell
 
     - name: Set up JDK 1.8
