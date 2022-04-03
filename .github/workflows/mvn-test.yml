@@ -26,7 +26,7 @@ jobs:
       shell: powershell
 
     - name: Add OpenCV to PATH
-      run: Write-Host "::add-path::C:\Users\runneradmin\opencv\build\java\x64\"
+      run: Write-Host "C:\Users\runneradmin\opencv\build\java\x64\" >> $env:GITHUB_PATH
       shell: powershell
 
     - name: Set up JDK 1.8
@@ -35,4 +35,4 @@ jobs:
         java-version: 1.8
 
     - name: Build with Maven
-      run: mvn -B package --file pom.xml
+      run: mvn -B package --file pom.xml -Djava.library.path="C:\Users\runneradmin\opencv\build\java\x64\;$env:PATH"
